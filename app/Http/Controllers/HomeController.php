@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use function view;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('pages.home');
+    }
+
+    public function emailVerifyNotice(Request $request)
+    {
+        return view('pages.email_verify_notice');
     }
 }
