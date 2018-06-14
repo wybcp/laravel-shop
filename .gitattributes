@@ -5,3 +5,5 @@
 CHANGELOG.md export-ignore
 /public/js
 /public/css
+/public/fonts
+/public/mix-manifest.json
