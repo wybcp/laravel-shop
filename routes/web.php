@@ -18,3 +18,8 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/email-verify-notice', 'HomeController@emailVerifyNotice')->name('email_verify_notice');
 Route::get('/email_verification/verify', 'EmailController@verify')->name('email_verification.verify');
 Route::get('/email_verification/send', 'EmailController@sendVerifyEmail')->name('email_verification.send');
+
+Route::group(['middleware'=>'email_verified'],function (){
+    Route::get('user-addresses', 'UserAddressesController@index')->name('user_addresses.index');
+
+});
