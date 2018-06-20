@@ -21,5 +21,8 @@ Route::get('/email_verification/send', 'EmailController@sendVerifyEmail')->name(
 
 Route::group(['middleware'=>'email_verified'],function (){
     Route::get('user-addresses', 'UserAddressesController@index')->name('user_addresses.index');
+    Route::get('user-addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
+    Route::get('user-addresses/edit', 'UserAddressesController@edit')->name('user_addresses.edit');
+    Route::post('user-addresses', 'UserAddressesController@store')->name('user_addresses.store');
 
 });
