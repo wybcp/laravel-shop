@@ -28,4 +28,9 @@ class UserAddress extends Model
     {
         return "{$this->province}{$this->city}{$this->district}{$this->address}";
     }
+
+    public function own(User $user, UserAddress $address)
+    {
+        return $user->id == $address->user_id;
+    }
 }
