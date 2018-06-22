@@ -16,6 +16,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('products','ProductsController@index')->name('products.index');
+Route::get('products/{product}','ProductsController@show')->name('products.show');
 //邮件需要激活
 Route::get('/email-verify-notice', 'HomeController@emailVerifyNotice')->name('email_verify_notice');
 Route::get('/email_verification/verify', 'EmailController@verify')->name('email_verification.verify');
