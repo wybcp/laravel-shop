@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
 use App\Models\Product;
+use Auth;
+use function boolval;
 use function compact;
 use Illuminate\Http\Request;
 use function view;
@@ -38,17 +40,38 @@ class ProductsController extends Controller
 
         $filters = ['search' => $search, 'order' => $order];
 
-        return view('products.index', compact(['products','filters']));
+        return view('products.index', compact(['products', 'filters']));
     }
 
-    public function show(Product $product,Request $request)
+    public function show(Product $product, Request $request)
     {
-        if (!$product->on_sale){
+        if (!$product->on_sale) {
             throw new InvalidRequestException('商品未上架');
         }
+        $is_favor = false;
+        if ($user = Auth::user()) {
+            $is_favor = boolval($user->favoriteProducts()->find($product->id));
+        }
 
-        return view('products.show',compact('product'));
+        return view('products.show', compact(['product', 'is_favor']));
     }
 
+    public function favor(Product $product, Request $request)
+    {
+        $user = Auth::user();
+        if ($user->favoriteProducts()->find($product->id)) {
+            return [];
+        }
+        $user->favoriteProducts()->attach($product);
+        return [];
+    }
+
+    public function disfavor(Product $product, Request $request)
+    {
+        $user = $request->user();
+        $user->favoriteProducts()->detach($product);
+
+        return [];
+    }
 
 }
