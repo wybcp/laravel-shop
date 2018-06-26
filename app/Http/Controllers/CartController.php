@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddCartRequest;
 use App\Models\CartItem;
+use App\Models\ProductSku;
 use Auth;
+use function compact;
+use function view;
 
 class CartController extends Controller
 {
@@ -20,7 +23,7 @@ class CartController extends Controller
         $sku_id = $request->input('sku_id');
         $amount = $request->input('amount');
 
-        if ($cart = $user->cartItem()->where('product_sku_id', $sku_id)->first()) {
+        if ($cart = $user->cartItems()->where('product_sku_id', $sku_id)->first()) {
             $cart->update([
                 'amount' => $cart->amount + $amount,
             ]);
@@ -31,6 +34,18 @@ class CartController extends Controller
             $cart->save();
         }
 
+        return [];
+    }
+
+    public function index()
+    {
+        $cart_items = Auth::user()->cartItems()->with(['productSku.product'])->get();
+        return view('cart.index', compact(['cart_items']));
+    }
+
+    public function destroy(ProductSku $sku)
+    {
+        Auth::user()->cartItems()->where('product_sku_id', $sku->id)->delete();
         return [];
     }
 }
