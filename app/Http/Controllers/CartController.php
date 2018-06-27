@@ -40,7 +40,8 @@ class CartController extends Controller
     public function index()
     {
         $cart_items = Auth::user()->cartItems()->with(['productSku.product'])->get();
-        return view('cart.index', compact(['cart_items']));
+        $addresses = Auth::user()->addresses()->orderBy('last_used_at', 'desc')->get();
+        return view('cart.index', compact(['cart_items', 'addresses']));
     }
 
     public function destroy(ProductSku $sku)

@@ -35,4 +35,6 @@ Route::group(['middleware' => 'email_verified'], function () {
     Route::post('cart', 'CartController@add')->name('cart.add');
     Route::get('cart', 'CartController@index')->name('cart.index');
     Route::delete('cart/{sku}', 'CartController@destroy')->name('cart.destroy');
+
+    Route::post('orders', 'OrdersController@store')->name('orders.store');
 });
