@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\OrderRequest;
+use App\Jobs\CloseOrder;
 use App\Models\ProductSku;
 use App\Models\UserAddress;
 use Auth;
 use Carbon\Carbon;
+use function config;
 use DB;
 use App\Models\Order;
 use function dd;
+use function view;
 
 class OrdersController extends Controller
 {
@@ -68,7 +71,18 @@ class OrdersController extends Controller
             return $order;
         });
 
+        $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
         return $order;
     }
-    //
+
+    public function index()
+    {
+        $orders = Order::query()
+            ->with(['items.product', 'items.productSku'])
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return view('orders.index', ['orders' => $orders]);
+    }
 }

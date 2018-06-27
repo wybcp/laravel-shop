@@ -27,7 +27,8 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-
+//    订单如果超过order_ttl  秒 未支付将关闭
+    'order_ttl'=>env('ORDER_TTL', 1800),
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
