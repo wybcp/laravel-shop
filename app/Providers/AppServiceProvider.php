@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // 往服务容器中注入一个名为 alipay 的单例对象
+//        $this->app->singleton('alipay')
     }
 }
