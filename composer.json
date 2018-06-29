@@ -8,6 +8,7 @@
         "php": ">=7.1.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "encore/laravel-admin": "^1.5",
+        "endroid/qr-code": "^3.2",
         "fideloper/proxy": "~3.3",
         "laravel-admin-ext/log-viewer": "^1.0",
         "laravel-admin-ext/redis-manager": "^1.0",

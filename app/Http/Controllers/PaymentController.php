@@ -7,9 +7,11 @@ use App\Models\Order;
 use Carbon\Carbon;
 use function config;
 use function dd;
+use Endroid\QrCode\QrCode;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use function response;
 use function typeOf;
 use Yansongda\LaravelPay\Facades\Pay;
 
@@ -75,5 +77,23 @@ class PaymentController extends Controller
 
     }
 
+    public function payByWechat(Order $order)
+    {
+        $this->authorize('own',$order);
+
+        if ($order->paid_at || $order->closed) {
+            throw new InvalidRequestException('订单状态不正确');
+        }
+
+        $wechat_order=Pay::wechat()->scan([
+            'out_trade_no' => $order->order_no,
+            'total_fee'    => $order->total_amount * 100,
+            'body'         => '支付 Laravel Shop 的订单：'.$order->no,
+        ]);
+
+        $qr_code=new QrCode($wechat_order->code_url);
+
+        return response($qr_code->writeString(),200,['Content-Type'=>$qr_code->getContentType()]);
+    }
 
 }
