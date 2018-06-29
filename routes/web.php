@@ -37,6 +37,8 @@ Route::group(['middleware' => 'email_verified'], function () {
     Route::delete('cart/{sku}', 'CartController@destroy')->name('cart.destroy');
 
     Route::resource('orders', 'OrdersController', ['only' => ['store', 'index', 'show']]);
+    Route::post('orders/{order}/received', 'OrdersController@received')->name('orders.received');
+
 
     Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
     Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');

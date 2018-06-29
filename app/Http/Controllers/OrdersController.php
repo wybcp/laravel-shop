@@ -11,6 +11,7 @@ use App\Models\UserAddress;
 use App\Services\CartService;
 use App\Services\OrderService;
 use Auth;
+use function back;
 use Carbon\Carbon;
 use function config;
 use DB;
@@ -98,5 +99,19 @@ class OrdersController extends Controller
         $this->authorize('own', $order);
 //        load() 方法与上一章节介绍的 with() 预加载方法有些类似，称为 延迟预加载，不同点在于 load() 是在已经查询出来的模型上调用，而 with() 则是在 ORM 查询构造器上调用。
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
+    }
+
+    public function received(Order $order)
+    {
+        $this->authorize('own', $order);
+        if ($order->ship_status !== Order::SHIP_STATUS_DELIVERED) {
+            throw new InvalidRequestException('发货状态不正确');
+        }
+
+        $order->update([
+            'ship_status' => Order::SHIP_STATUS_RECEIVED,
+        ]);
+
+        return $order;
     }
 }
