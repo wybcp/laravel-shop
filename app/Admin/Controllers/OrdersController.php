@@ -10,6 +10,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use function view;
 
 class OrdersController extends Controller
 {
@@ -81,10 +82,10 @@ class OrdersController extends Controller
             $grid->column('user.name', '买家');
             $grid->total_amount('总金额')->sortable();
             $grid->paid_at('支付时间')->sortable();
-            $grid->ship_status('物流')->display(function($value) {
+            $grid->ship_status('物流')->display(function ($value) {
                 return Order::$shipStatusMap[$value];
             });
-            $grid->refund_status('退款状态')->display(function($value) {
+            $grid->refund_status('退款状态')->display(function ($value) {
                 return Order::$refundStatusMap[$value];
             });
             // 禁用创建按钮，后台不需要创建订单
@@ -93,6 +94,8 @@ class OrdersController extends Controller
                 // 禁用删除和编辑按钮
                 $actions->disableDelete();
                 $actions->disableEdit();
+                $actions->append('<a class="btn btn-xs btn-primary" href="' . route('admin.orders.show', [$actions->getKey()]) . '">查看</a>');
+
             });
             $grid->tools(function ($tools) {
                 // 禁用批量删除按钮
@@ -119,6 +122,20 @@ class OrdersController extends Controller
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
+        });
+    }
+
+    public function show(Order $order)
+    {
+        return Admin::content(function (Content $content) use ($order) {
+            $content->header('订单详情');
+            $content->body(
+                view('admin.orders.show',
+                    [
+                        'order' => $order->load(['items.product', 'items.productSku']),
+//                        'order' => $order,
+                    ]
+                ));
         });
     }
 }
