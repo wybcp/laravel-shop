@@ -160,8 +160,8 @@ body {
     display: flex;
     flex-drection: row;
     font-size: 12px;
-    &>div {
-      &.sold_count,&.review_count {
+    & > div {
+      &.sold_count, &.review_count {
         border-right: 1px dotted #c9c9c9;
       }
       width: 33%;
@@ -174,7 +174,7 @@ body {
     }
   }
   .skus {
-    &>label {
+    & > label {
       color: #999;
       font-size: 12px;
       padding: 0 10px 0 10px;
@@ -221,7 +221,7 @@ body {
     padding-left: 44px;
   }
 
-  .product-detail  {
+  .product-detail {
     .nav.nav-tabs > li > a {
       border-radius: 0 !important;
     }
@@ -323,6 +323,7 @@ body {
     }
   }
 }
+
 .orders-show-page {
   font-size: 12px;
   .vertical-middle {
@@ -377,7 +378,7 @@ body {
   }
   .order-summary {
     width: 50%;
-    font-family: Verdana,Tahoma,Helvetica,Arial;
+    font-family: Verdana, Tahoma, Helvetica, Arial;
     .total-amount {
       font-weight: bolder;
       font-size: 14px;
@@ -387,5 +388,10 @@ body {
       width: 150px;
       padding-right: 20px;
     }
+  }
+
+  .payment-buttons {
+    margin-top: 10px;
+    padding-right: 10px;
   }
 }

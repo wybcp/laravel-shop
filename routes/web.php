@@ -36,5 +36,11 @@ Route::group(['middleware' => 'email_verified'], function () {
     Route::get('cart', 'CartController@index')->name('cart.index');
     Route::delete('cart/{sku}', 'CartController@destroy')->name('cart.destroy');
 
-    Route::resource('orders','OrdersController',['only'=>['store','index','show']]);
+    Route::resource('orders', 'OrdersController', ['only' => ['store', 'index', 'show']]);
+
+    Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
+    Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
+
 });
+
+Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');

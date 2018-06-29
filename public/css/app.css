@@ -8814,7 +8814,7 @@ body {
 
 .orders-show-page .order-summary {
   width: 50%;
-  font-family: Verdana,Tahoma,Helvetica,Arial;
+  font-family: Verdana, Tahoma, Helvetica, Arial;
 }
 
 .orders-show-page .order-summary .total-amount {
@@ -8826,5 +8826,10 @@ body {
   display: inline-block;
   width: 150px;
   padding-right: 20px;
+}
+
+.orders-show-page .payment-buttons {
+  margin-top: 10px;
+  padding-right: 10px;
 }
 

@@ -74,7 +74,9 @@
                                     @elseif($order->closed)
                                         已关闭
                                     @else
-                                        未支付
+                                        <div class="payment-buttons">
+                                            <a class="btn btn-primary btn-sm" href="{{ route('payment.alipay', ['order' => $order->id]) }}">支付宝支付</a>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
