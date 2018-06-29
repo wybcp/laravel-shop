@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderPaid;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use Carbon\Carbon;
 use function config;
 use function dd;
 use Endroid\QrCode\QrCode;
+use function event;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -51,6 +53,10 @@ class PaymentController extends Controller
 
     }
 
+    /**
+     * alipay 支付完成服务器异步通知处理
+     * @return string
+     */
     public function alipayNotify()
     {
         // 校验输入参数
@@ -73,6 +79,7 @@ class PaymentController extends Controller
             'payment_no'     => $data->trade_no, // 支付宝订单号
         ]);
 
+        $this->afterPaid($order);
         return Pay::alipay()->success();
 
     }
@@ -96,4 +103,13 @@ class PaymentController extends Controller
         return response($qr_code->writeString(),200,['Content-Type'=>$qr_code->getContentType()]);
     }
 
+
+    /**
+     * 订单支付完成之后异步调用的事件
+     * @param Order $order
+     */
+    protected function afterPaid(Order $order)
+    {
+        event(new OrderPaid($order));
+    }
 }
