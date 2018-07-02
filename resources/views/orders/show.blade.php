@@ -115,13 +115,18 @@
                                             <button type="button" id="btn-receive" class="btn btn-sm btn-success">确认收货</button>
                                         </div>
                                     @endif
-
-                                    @if($order->paid_at && $order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
-                                        <div class="refund-button">
-                                            <button class="btn btn-sm btn-danger" id="btn-apply-refund">申请退款</button>
-                                        </div>
-                                    @endif
                                 </div>
+                                @if(isset($order->extra['refund_disagree_reason']))
+                                    <div>
+                                        <span>拒绝退款理由：</span>
+                                        <div class="value">{{ $order->extra['refund_disagree_reason'] }}</div>
+                                    </div>
+                                @endif
+                                @if($order->paid_at && $order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
+                                    <div class="refund-button">
+                                        <button class="btn btn-sm btn-danger" id="btn-apply-refund">申请退款</button>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -181,7 +186,7 @@
                     content: "input",
                 }).then(function (input) {
                     // 当用户点击 swal 弹出框上的按钮时触发这个函数
-                    if(!input) {
+                    if (!input) {
                         swal('退款理由不可空', '', 'error');
                         return;
                     }

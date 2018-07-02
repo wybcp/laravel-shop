@@ -3,19 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 use function random_int;
 
 class Order extends Model
 {
-    const REFUND_STATUS_PENDING = 'pending';
-    const REFUND_STATUS_APPLIED = 'applied';
+    const REFUND_STATUS_PENDING    = 'pending';
+    const REFUND_STATUS_APPLIED    = 'applied';
     const REFUND_STATUS_PROCESSING = 'processing';
-    const REFUND_STATUS_SUCCESS = 'success';
-    const REFUND_STATUS_FAILED = 'failed';
+    const REFUND_STATUS_SUCCESS    = 'success';
+    const REFUND_STATUS_FAILED     = 'failed';
 
-    const SHIP_STATUS_PENDING = 'pending';
+    const SHIP_STATUS_PENDING   = 'pending';
     const SHIP_STATUS_DELIVERED = 'delivered';
-    const SHIP_STATUS_RECEIVED = 'received';
+    const SHIP_STATUS_RECEIVED  = 'received';
 
     public static $refundStatusMap = [
         self::REFUND_STATUS_PENDING    => '未退款',
@@ -56,9 +57,10 @@ class Order extends Model
         'extra'     => 'json',
     ];
 
-    protected $dates=[
+    protected $dates = [
         'paid_at',
     ];
+
 //    public $timestamps=[]
 
     public static function findAvailableNo()
@@ -67,7 +69,7 @@ class Order extends Model
         $prefix = date('YmdHis');
         for ($i = 0; $i < 10; $i++) {
             // 随机生成 6 位的数字
-            $no = $prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $no = $prefix . str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
             // 判断是否已经存在
             if (!static::query()->where('order_no', $no)->exists()) {
                 return $no;
@@ -86,5 +88,14 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public static function getAvailableRefundNo()
+    {
+        do {
+            $no = Uuid::uuid4()->getHex();
+        } while (self::query()->where('redfund_no', $no)->exists());
+
+        return $no;
     }
 }
