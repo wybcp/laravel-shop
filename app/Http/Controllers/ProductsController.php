@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Auth;
 use function boolval;
@@ -53,7 +54,18 @@ class ProductsController extends Controller
             $is_favor = boolval($user->favoriteProducts()->find($product->id));
         }
 
-        return view('products.show', compact(['product', 'is_favor']));
+        $reviews = OrderItem::query()
+            ->with(['order.user', 'productSku'])
+            ->where('product_id', $product->id)
+            ->whereNotNull('reviewed_at')
+            ->orderBy('reviewed_at', 'desc')
+            ->limit(10)
+            ->get();
+        return view('products.show', [
+            'product'  => $product,
+            'is_favor' => $is_favor,
+            'reviews'  => $reviews,
+        ]);
     }
 
     public function favor(Product $product, Request $request)
