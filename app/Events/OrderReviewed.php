@@ -11,14 +11,14 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderReviewd
+class OrderReviewed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     protected $order;
+
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * OrderReviewed constructor.
+     * @param Order $order
      */
     public function __construct(Order $order)
     {

@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderReviewd;
+use App\Events\OrderReviewed;
 use App\Models\OrderItem;
 use DB;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,10 +23,10 @@ class UpdateProductRating
     /**
      * Handle the event.
      *
-     * @param  OrderReviewd $event
+     * @param  OrderReviewed $event
      * @return void
      */
-    public function handle(OrderReviewd $event)
+    public function handle(OrderReviewed $event)
     {
         $items = $event->getOrder()->items()->with(['product'])->get();
         foreach ($items as $item) {

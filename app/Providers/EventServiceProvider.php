@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Events\OrderPaid;
-use App\Events\OrderReviewd;
+use App\Events\OrderReviewed;
 use App\Listeners\RegisteredListener;
 use App\Listeners\SendOrderPaidMail;
 use App\Listeners\UpdateProductRating;
@@ -20,17 +20,17 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
+        'App\Events\Event'   => [
             'App\Listeners\EventListener',
         ],
-        Registered::class  => [
+        Registered::class    => [
             RegisteredListener::class,
         ],
-        OrderPaid::class   => [
+        OrderPaid::class     => [
             UpdateProductSoldCount::class,
             SendOrderPaidMail::class,
         ],
-        OrderReviewd::class=>[
+        OrderReviewed::class =>[
             UpdateProductRating::class,
         ],
     ];

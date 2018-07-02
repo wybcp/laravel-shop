@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 
-use App\Events\OrderReviewd;
+use App\Events\OrderReviewed;
 use App\Exceptions\InvalidRequestException;
+use App\Http\Requests\ApplyRefundRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\SendReviewRequest;
 use App\Jobs\CloseOrder;
@@ -20,6 +21,7 @@ use DB;
 use App\Models\Order;
 use function dd;
 use function event;
+use function ord;
 use function view;
 
 class OrdersController extends Controller
@@ -149,11 +151,34 @@ class OrdersController extends Controller
                     'review'      => $review['review'],
                     'reviewed_at' => Carbon::now(),
                 ]);
-                $order->update(['reviewed'=>true]);
+                $order->update(['reviewed' => true]);
             }
-            event(new OrderReviewd());
+            event(new OrderReviewed($order));
         });
 
         return back();
+    }
+
+    public function applyRefund(Order $order, ApplyRefundRequest $request)
+    {
+        $this->authorize('own', $order);
+        if (!$order->paid_at) {
+            throw new InvalidRequestException('该订单未支付，不可退款!');
+        }
+
+        if ($order->refund_status !== Order::REFUND_STATUS_PENDING) {
+            throw new InvalidRequestException('该订单已申请退款，请不要重复提交!');
+        }
+        $extra = $order->extra ?: [];
+        $extra['refund_reason'] = $request->input('reason');
+        // 将订单退款状态改为已申请退款
+        $order->update([
+            'refund_status' => Order::REFUND_STATUS_APPLIED,
+            'extra'         => $extra,
+        ]);
+
+        return $order;
+
+
     }
 }
