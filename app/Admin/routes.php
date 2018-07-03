@@ -26,4 +26,9 @@ Route::group([
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');
 
     $router->get('coupon-codes', 'CouponCodesController@index');
+    $router->post('coupon-codes', 'CouponCodesController@store');
+    $router->get('coupon-codes/create', 'CouponCodesController@create');
+    $router->get('coupon-codes/{id}/edit', 'CouponCodesController@edit');
+    $router->put('coupon-codes/{id}', 'CouponCodesController@update');
+    $router->delete('coupon-codes/{id}', 'CouponCodesController@destroy');
 });
