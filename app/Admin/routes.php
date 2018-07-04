@@ -31,4 +31,5 @@ Route::group([
     $router->get('coupon-codes/{id}/edit', 'CouponCodesController@edit');
     $router->put('coupon-codes/{id}', 'CouponCodesController@update');
     $router->delete('coupon-codes/{id}', 'CouponCodesController@destroy');
+
 });
